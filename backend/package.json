@@ -1,0 +1,35 @@
+{
+  "name": "backend_app_taker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.25",
+    "universal-cookie-express": "^4.0.3"
+  },
+  "devDependencies": {
+    "coc-eslint": "^1.2.7",
+    "eslint": "^7.5.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tfourcat/backend_app_taker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tfourcat/backend_app_taker/issues"
+  },
+  "homepage": "https://github.com/Tfourcat/backend_app_taker#readme"
+}
