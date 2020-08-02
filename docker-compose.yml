@@ -5,28 +5,28 @@ services:
     ports:
      - "8002:8002"
   backend:
-    build: ./backend_app_taker/
+    build: ./backend/
     ports:
       - "6200:6200"
     volumes:
-      - ./backend_app_taker:/usr/src/app
+      - ./backend:/usr/src/app
     depends_on:
       - mongodb
   frontend:
-    build: ./frontend_app_taker/
+    build: ./app_front/
     tty: true
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend_app_taker:/usr/src/app
+      - ./app_front:/usr/src/app
     depends_on:
       - backend
   auth:
-    build: ./auth_app_taker/
+    build: ./auth_front/
     tty: true
     ports:
       - "8080:8080"
     volumes:
-      - ./auth_app_taker:/usr/src/app
+      - ./auth_front:/usr/src/app
     depends_on:
       - frontend
