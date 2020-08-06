@@ -1,32 +1,34 @@
 # Mission manager web app
 
 Little app made with:
+- NodeJS
 - React and material UI for frontend
-- NodeJS and Express for backend.
+- Express for backend
 
 Contains an authentication app where admins can register new employees.
-An other app where expert can add new missions assigned to technicians that technicians can validate theses
+An other app where expert can add new missions assigned to technicians.
+And technicians can validate missions assigned to them.
 
 # Dependencies
 
 - nodejs >= v14.7.0
 - docker >= v19.03.12
-- docker-compose >= 1.26.2
+- docker-compose >= v1.26.2
 
 # Quick start
 
 ## Dev
 
 ```zsh
->$ git clone
+$> git clone
 
->$ docker-compose up
+$> docker-compose up
 ```
-
 
 ### A default admin is created: 
 
-- Login: admin 
+- Login: admin
+
 - Password: xyz
 
 ### Routes are:
