@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 import {
-    BrowserRouter as Router,
-    Route,
+  BrowserRouter as Router,
+  Route,
 } from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import SignIn from "./SignIn.js"
@@ -23,37 +23,25 @@ function App() {
       <Route exact path='/'>
         <SignIn />
       </Route>
-      <Route path = '/dashboard/expert'>
+      <Route path='/dashboard/expert'>
         <ExpertHeader displayedMissions={displayedMissions}
-                setDisplayedMissions={setDisplayedMissions}/>
+          setDisplayedMissions={setDisplayedMissions} />
       </Route>
-      <Route exact path = '/dashboard/expert'>
-        <ExpertMissionPage displayedMissions={displayedMissions}/>
+      <Route exact path='/dashboard/expert'>
+        <ExpertMissionPage displayedMissions={displayedMissions} />
       </Route>
-      <Route exact path = '/dashboard/expert/addMission'>
+      <Route exact path='/dashboard/expert/addMission'>
         <AddMissionHeader />
         <AddMission />
       </Route>
-      <Route path ="/dashboard/technician">
+      <Route path="/dashboard/technician">
         <TechHeader />
       </Route>
-      <Route exact path = '/dashboard/technician'>
+      <Route exact path='/dashboard/technician'>
         <TechMissionPage />
       </Route>
     </Router>
   );
 }
 
-        //</Route>
-        //<BacklogPage />
-        //<Route exact path = '/backlogManager/add'>
-        //  <AdminHeader />
-        //</Route>
-        //<Route exact path = '/backlogManager/:bgName'>
-        //  <TasksHeader/>
-        //  <TasksPage />
-        //</Route>
-            //<Route exact path='/register'>
-            //    <Register />
-            //</Route>
 export default App;

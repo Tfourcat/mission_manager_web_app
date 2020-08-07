@@ -4,11 +4,11 @@ import Fab from '@material-ui/core/Fab';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import {Redirect} from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import Select from "react-dropdown-select";
-import { useState, useEffect } from 'react'
+import {useState, useEffect} from 'react'
 import FormGroup from '@material-ui/core/FormGroup';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import dateUtils from '@date-io/dayjs';
 
 const fetchTechnicians = async () => {
@@ -27,7 +27,7 @@ const fetchTechnicians = async () => {
   return res
 }
 
-export default function AddMission(props) {
+export default function AddMission(_) {
   const [missionName, setMissionName] = useState(null)
   const [startingDate, setStartingDate] = useState(null)
   const [location, setLocation] = useState(null)
@@ -44,17 +44,22 @@ export default function AddMission(props) {
     fetchData()
   }, [])
 
-  const formCompleted = () => {
+  const isFormCompleted = () => {
     return status && selectedTechnicians && location
       && missionName && startingDate && estimmatedTime && selectedTechnicians !== []
   }
 
   const registerNewMission = async () => {
-    const url = "http://localhost:6200/mission/add"
+    const url = "http://localhost:6200/mission/create"
     const token = localStorage.getItem('JWT')
-    const mission = {name: missionName, date: startingDate,
-                    location: location, estimmatedTime: estimmatedTime,
-                    technicians: selectedTechnicians, status: status };
+    const mission = {
+      name: missionName,
+      date: startingDate,
+      location: location,
+      estimmatedTime: estimmatedTime,
+      technicians: selectedTechnicians,
+      status: status
+    };
 
     const res = await fetch(url, {
       method: 'POST',
@@ -64,62 +69,63 @@ export default function AddMission(props) {
         'Content-Type': 'application/json',
       },
     }).then(res => res.json())
-      .catch(err => console.log(err));
     console.log(res)
     history.push('/dashboard/' + localStorage.getItem('group'))
   }
 
-  if (localStorage.getItem('JWT'))
-    return (
-      <center>
-        <Typography style={{paddingTop: '10px'}} component="h1" variant="h5">
-          Ajouter une nouvelle mission:
-        </Typography>
-        <hr style={{
-          display: 'block',
-          height: '1px',
-          border: '0',
-          borderTop: '1px solid #ccc',
-          margin: '1em 0',
-          padding: '0'
-        }}
+  if (!localStorage.getItem('JWT'))
+    return <Redirect to='/' />
+
+  return (
+    <center>
+      <Typography style={{paddingTop: '10px'}} component="h1" variant="h5">
+        Ajouter une nouvelle mission:
+      </Typography>
+      <hr style={{
+        display: 'block',
+        height: '1px',
+        border: '0',
+        borderTop: '1px solid #ccc',
+        margin: '1em 0',
+        padding: '0'
+      }}
+      />
+      <FormGroup style={{display: 'block', width: '300px', paddingTop: '10px'}}>
+        <TextField
+          required
+          style={{marginBottom: '20px'}}
+          onChange={e => setMissionName(e.target.value)}
+          label="Nom"
         />
-        <FormGroup style={{display: 'block', width: '300px', paddingTop: '10px'}}>
-          <TextField
-            required
-            style={{marginBottom: '20px'}}
-            onChange={e => setMissionName(e.target.value)}
-            label="Nom"
+        <TextField
+          required
+          style={{marginBottom: '20px'}}
+          onChange={e => setLocation(e.target.value)}
+          label="Lieu"
+        />
+        <Typography style={{paddingTop: '5px'}} component="h5">
+          Affecter des techniciens:
+        </Typography>
+        <Select
+          options={technicians}
+          valueField="username"
+          labelField="username"
+          multi={true}
+          required={true}
+          separator={true}
+          searchable={true}
+          onChange={(selectedTechnicians) => {setSelectedTechnicians(selectedTechnicians)}}
+        />
+        <MuiPickersUtilsProvider utils={dateUtils}>
+          <KeyboardDatePicker
+            style={{width: "215px"}}
+            margin="normal"
+            label="Date de départ"
+            value={startingDate}
+            format="dd/MM/YYYY"
+            onChange={date => {setStartingDate(date)}}
+            KeyboardButtonProps={{'aria-label': 'change date', }}
           />
-          <TextField
-            required
-            style={{marginBottom: '20px'}}
-            onChange={e => setLocation(e.target.value)}
-            label="Lieu"
-          />
-          <Typography style={{paddingTop: '5px'}} component="h5">
-            Affecter des techniciens:
-          </Typography>
-          <Select
-            options={technicians}
-            valueField="username"
-            labelField="username"
-            multi={true}
-            required={true}
-            separator={true}
-            searchable={true}
-            onChange={(selectedTechnicians) => {setSelectedTechnicians(selectedTechnicians)}}
-          />
-          <MuiPickersUtilsProvider utils={dateUtils}>
-            <KeyboardDatePicker
-              style={{width:"215px"}}
-              margin="normal"
-              label="Date de départ"
-              value={startingDate}
-              format="dd/MM/YYYY"
-              onChange={date => {setStartingDate(date)}}
-              KeyboardButtonProps={{'aria-label': 'change date',}}
-            />
           <TextField
             required
             multiline
@@ -135,16 +141,12 @@ export default function AddMission(props) {
             onChange={e => setEstimmatedTime(e.target.value)}
             label="Temps requis (en jours)"
           />
-          </MuiPickersUtilsProvider>
-        </FormGroup>
-        <Fab disabled={!formCompleted()} style={{paddingTop: 'auto'}} onClick={registerNewMission} color="primary" aria-label="add">
-          <AddIcon />
-        </Fab>
-      </center>
-    );
-  else
-    return (
-      <Redirect to='/' />
-    );
+        </MuiPickersUtilsProvider>
+      </FormGroup>
+      <Fab disabled={!isFormCompleted()} style={{paddingTop: 'auto'}} onClick={registerNewMission} color="primary" aria-label="add">
+        <AddIcon />
+      </Fab>
+    </center>
+  );
 }
 

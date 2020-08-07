@@ -1,25 +1,25 @@
-var express = require('express');
-var app = express();
-var router = express.Router();
-var bcrypt = require('bcryptjs');
+const express = require('express');
+const router = express.Router();
 
-var Employee = require('../models/employee');
+const Employee = require('../models/employee');
 
-router.route('/technicians').get(function (req, res) {
-  Employee.find({group:"technician"}, function (err, item) {
-    if (!item)
-      res.json([])
-    else
-      res.json(item);
-  });
+router.route('/technicians').get((_, res) => {
+  Employee.find({group: "technician"}, (err, items) => {
+    if (err) {
+      res.json({"error": "internal server error"})
+    } else {
+      res.json(items ?? [])
+    }
+  })
 });
 
-router.route('/').get(function (req, res) {
-  Employee.find(function (err, items) {
+router.route('/').get((_, res) => {
+  Employee.find((err, items) => {
     if (err) {
-      res.json(err);
+      console.error(err)
+      res.json("internal server error");
     } else {
-      res.json(items);
+      res.json(items ?? []);
     }
   });
 });

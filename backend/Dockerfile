@@ -1,6 +1,8 @@
-FROM node
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+FROM node:14
+
+COPY . .
+
+RUN npm install
 
 EXPOSE 6200
-CMD [ "npm", "start" ]
+CMD [ "npm","start" ]

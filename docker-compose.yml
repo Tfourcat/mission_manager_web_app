@@ -1,19 +1,22 @@
 version: '3'
+
 services:
   mongodb:
     image: "mongo"
     ports:
      - "8002:8002"
+
   backend:
-    build: ./backend/
+    build: ./backend
     ports:
       - "6200:6200"
     volumes:
       - ./backend:/usr/src/app
     depends_on:
       - mongodb
-  frontend:
-    build: ./app_front/
+
+  app_front:
+    build: ./app_front
     tty: true
     ports:
       - "3000:3000"
@@ -21,12 +24,13 @@ services:
       - ./app_front:/usr/src/app
     depends_on:
       - backend
-  auth:
-    build: ./auth_front/
+
+  auth_front:
+    build: ./auth_front
     tty: true
     ports:
       - "8080:8080"
     volumes:
       - ./auth_front:/usr/src/app
     depends_on:
-      - frontend
+      - app_front

@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from "react-router-dom";
+import {Alert, AlertTitle} from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -31,10 +32,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function SignIn(props) {
+export default function SignIn() {
   const classes = useStyles();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   const history = useHistory();
 
   const handleLogin = async (event) => {
@@ -42,25 +44,26 @@ export default function SignIn(props) {
     authenticationHandler(login, password)
   }
 
-  const authenticationHandler = async (username, password) => {
+  const authenticationHandler = async (login, password) => {
     const URL = "http://localhost:6200/auth/login"
 
     const res = await fetch(URL, {
       method: 'POST',
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify({ username: login, password: password }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
-      .catch(err => console.log(err))
+      .then(res => res.json())
 
-    if (res && res.status === 200) {
-      res.json().then(res => {
+    if (res && res.error)
+      setError(true)
+
+    if (res && res.token) {
         localStorage.setItem('JWT', res.token)
         localStorage.setItem('group', res.userGroup)
         localStorage.setItem('id', res.userId)
         history.push('/dashboard/' + res.userGroup)
-      })
     }
   }
 
@@ -111,6 +114,10 @@ export default function SignIn(props) {
           </Button>
         </form>
       </div>
+      {error && <Alert severity="error">
+        <AlertTitle>Erreur</AlertTitle>
+        <strong>Echec de l'authentification</strong>
+      </Alert>}
     </Container>
   );
 }

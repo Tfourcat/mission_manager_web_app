@@ -1,26 +1,39 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var jwt = require('express-jwt');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const jwt = require('express-jwt');
 const secret = process.env.secret || 'missing-env-secret'
+var bcrypt = require('bcryptjs');
 
-var port = 6200;
+const port = 6200;
+const Employee = require("./src/models/employee")
 
 mongoose.connect('mongodb://mongodb')
-    .then(() => {
-      console.log('Backend Started');
+  .then(() => {
+    console.log('Backend Started');
+    Employee.findOne({username: "admin"}, async (_, item) => {
+      if (!item) {
+        const defaultAdmin = new Employee({
+          group: "admin",
+          username: "admin",
+          password: bcrypt.hashSync("xyz", bcrypt.genSaltSync())
+        })
+        await defaultAdmin.save()
+        console.log("Default admin created")
+      }
     })
-    .catch(err => {
-        console.error('Backend error:', err.stack);
-        process.exit(1);
-    });
+  })
+  .catch(err => {
+    console.error('Backend error:', err.stack);
+    process.exit(1);
+  });
 
-var employeeRoutes = require('./src/routes/employeeRoutes');
-var missionRoutes = require('./src/routes/missionRoutes');
-var authRoutes = require('./src/routes/authRoutes');
+const employeeRoutes = require('./src/routes/employeeRoutes');
+const missionRoutes = require('./src/routes/missionRoutes');
+const authRoutes = require('./src/routes/authRoutes');
 
-var app = express();
+const app = express();
 app.use(cors());
 app.use(jwt({secret: secret, algorithms: ['HS256']}).unless({path: [/^\/auth/]}))
 app.use(bodyParser.json());
