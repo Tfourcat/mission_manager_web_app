@@ -20,11 +20,8 @@ And technicians can validate missions assigned to them.
 ## Dev
 
 ```zsh
-$> git clone https://github.com/Tfourcat/mission_manager_web_app.git
-
-$> cd mission_manager_web_app
-
-$> docker-compose build
+$> git clone https://github.com/Tfourcat/mission_manager_web_app.git && \
+    cd mission_manager_web_app && docker-compose build
 
 $> docker-compose up [-d] 
 ```
