@@ -37,3 +37,8 @@ $> docker-compose up [-d]
 - localhost:3000 for the mission manager app
 
 - localhost:8080 for the authentication app
+
+# TODO
+
+- Set default admin by docker env variable
+- Avoid urls in code, set env variable too
